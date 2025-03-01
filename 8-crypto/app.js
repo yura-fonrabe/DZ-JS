@@ -1,41 +1,29 @@
-/* используем метод шифрофания с помощью кодового слова */
-const str_in   = 'abcdefghijklmnopqrstuvwxyz1234567890';
-const str_out  = 'fonrabe1234567890cdghijklmpqstuvwxyz';
-
-function crypto (array_1) {
+//Работаем со строкой как с массивом символов
+function crypto (word) {
     
-    let word = '';
-    for (let i = 0; i < array_1.length; i++) {
-        
-        a = array_1[i];
-        index = str_in.indexOf(a);
-        word += str_out[index];
-    }
-    return word;
+    let ind_sr = Math.floor(word.length / 2);
+    let arr1 = word.slice(0, ind_sr);
+    let arr2 = word.slice(ind_sr);
+
+    let ind_1 = Math.floor(arr1.length / 2);
+    let ind_2 = Math.floor(arr2.length / 2);
+ 
+    [arr1[0], arr1[ind_1]] = [arr1[ind_1], arr1[0]];
+    [arr2[0], arr2[ind_2]] = [arr2[ind_2], arr2[0]];
+    
+    return arr2.concat(arr1);
 }
  
 function check (password, psw_check) {
 
-    let word = '';
-    let arr = password.split('');
-    
-    for (let i = 0; i < arr.length; i++) {
-
-        a = arr[i];
-        index = str_out.indexOf(a);
-        word += str_in[index];
+    if (!password || !psw_check) {
+        return false
     }
-    
-    if (word === psw_check) {
-        return true;
-    }
-    return false;
+    return password === crypto(psw_check);
 }
 
 // -------------------------------------------------------------------------------------
-let psw = prompt('Введите пароль латиницей:').toLocaleLowerCase();
-let password = crypto(psw.split(''));
-console.log(password);
-
-let psw_check = prompt('Введите пароль для проверки латиницей:').toLocaleLowerCase();
-console.log(check(password, psw_check));
+let psw = prompt('Введите пароль латиницей:').toLocaleLowerCase();  
+let encryptedPassword = crypto(psw);
+let psw2 = prompt('Введите пароль латиницей:').toLocaleLowerCase();  
+console.log(check(psw2, encryptedPassword));
